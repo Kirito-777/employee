@@ -213,7 +213,8 @@
         width:100%;
         height:100%;
         box-sizing: border-box;
-        background-color: #ccc;
+        background-color: #e5eef3c9;
+
         font-size:20px;
         padding:10px;
         position:relative;
@@ -274,7 +275,7 @@
     .form {
         position: relative;
         left:50%;
-        top:150px;
+        top:50px;
         
         transform: translate(-50%);
         color:#fff;
@@ -335,20 +336,21 @@
     .cicle {
         width: 450px;
         height: 450px;
-        background-color:#eee;
         border-radius:50%;
         position:absolute;
         left:50%;
         box-shadow: 0px 0px 15px #666;
         transform: translate(-50%);
         background-color:white;
+        background-image: linear-gradient(to bottom right , #899ea7, #fff);
+
     }
     /*头像*/
     .img_position {
         margin:50px;
         width: 150px;
         height: 150px;
-        background-image: url("../../assets/user.png");
+        background-image: url("../../assets/root.jpg");
         background-size:  auto 100%;
         background-color:pink;
         border-radius: 50%;

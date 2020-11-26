@@ -116,6 +116,7 @@ import { mapState } from 'vuex'
             border-radius: 50%;
         }
     }
+    
 </style>
 
 <style lang="scss">
@@ -148,7 +149,7 @@ import { mapState } from 'vuex'
         position:absolute;
         right:160px;
         top:8px;
-        background-image: url("../assets/user.png");
+        background-image: url("../assets/root.jpg");
         background-size: 100% auto;
     }
 
