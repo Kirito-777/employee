@@ -1,26 +1,27 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import App from './App'
-import router from './router'
+import App from './App.vue'
+import router from './router'  //引入 vue-router
+import store from './store'    //引入 vuex
+import axios from 'axios'
 
-//引入Element-UI
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
-Vue.use(ElementUI);
-
-//引入store
-import store from './store'
-
+// 全局配置
+import '@/assets/scss/reset.scss' //全局样式
+import 'element-ui/lib/theme-chalk/index.css' //element-ui样式
+import http from '@/api/config'  //axios
+import './mock'   // mockjs
+// 第三方包
+import ElementUI from 'element-ui'
+Vue.use(ElementUI)
 Vue.config.productionTip = false
+Vue.prototype.$http = http
 
+Vue.prototype.$ajsx=axios
+// Vue.config.productionTip = false
+import VueParticles from 'vue-particles'  
+Vue.use(VueParticles)  
 
-
-/* eslint-disable no-new */
 new Vue({
-  el: '#app',
   router,
   store,
-  template: '<App/>',
-  components: { App }
-})
+  render: h => h(App),
+}).$mount('#app')
