@@ -1,9 +1,9 @@
 <template>
     <div class="container">
         <header>
-            <p>欢迎进入个人中心</p>
-             
+            <p>欢迎进入个人中心</p>           
         </header>
+        
         <main>
             <div class="cicle">
                 <!-- 头像 -->
@@ -27,36 +27,18 @@
                        
                     </ul>
                     </div>
+                    <!-- 文件上传 start-->
+
+            <div class="fileContent" >
+                    <form action="" id="formFile">
+                    <span class="footerTip">- - - - - -选择.xls文件批量插入员工数据- - - - - -</span>
+                        <input type="file" name="fileInput" ref="refFile" :disabled="trueOrFalse">                       
+                    </form>                 
+                    <button @click="goFile" :disabled="trueOrFalse">提交</button><br>                       
             </div>
-            <!-- <table class="per_table">
-            <tr>
-                    <td class="spaceTd"></td>
-                </tr>
-            <tr>
-                <td>
-                    <div class="img_position">
-                        <img :src=src alt="我是头像" class="img_size">
-                        <span class="changePwd" @click="showF">-&nbsp;-&nbsp;修改密码&nbsp;-&nbsp;-</span>
-                    </div>
-                   
-                </td>
-                
-                </tr>
-                <tr>
-                    <td>
-                    <ul class="per_ul">
-                        <li>用户名：{{username}}</li>
-                        <li>真实姓名：{{realname}}</li>
-                        <li>性别：{{sex}}</li>
-                       
-                    </ul>
-                </td>
-                
-                </tr>
-                <tr>
-                    <td class="spaceTd"></td>
-                </tr>
-            </table> -->
+            <!-- 文件上传 end-->
+            </div>
+            
             <form action="#" v-if="showForm" class="form">
                
                 <span>- - -请输入您的新旧密码- - -</span><br>
@@ -77,6 +59,7 @@
 </template>
 
 <script>
+import Axios from "axios";
     // config分页数据，这里面至少包括当前页码 总数量
     export default {
         data() {
@@ -91,6 +74,7 @@
                 // src: '../assets/user.png',
                 showForm:false,
                 checkBtn:true,
+                trueOrFalse: sessionStorage.getItem("trueFalse") == "false",
                 // editIN:true,
                 // tip:"修改",
                 userGet:{
@@ -186,21 +170,61 @@
                 this.userGet.inputpassword = "";
                 this.userGet.inpuTNewpassword = "";
             },
-            // editImput(){
+            // 文件上传
+            goFile(){
+           
+                var formData = new FormData();
+                var formObj = new FormData(document.getElementById("formFile"));
+                console.log(formObj.get("fileInput"));
+                formData.append("file",formObj.get("fileInput"));
+                formData.append("name",2);
+
+                //拿到file对象
+                //    console.log(formData.get("file"));
+                    var value = formData.get("file");
+                    // console.log(value);
                 
-            //     if(this.tip=="修改"){
-            //         this.editIN = false;
-            //         this.tip = "确定修改";
-            //     }else{
+                    Axios({
+                            
+                            url: "http://192.168.1.20:8080/staffManage/readfile",
+                            method: "put",
+                            // headers:{
+                            //     'Content-Type': 'multipart/form-data'
+                            // },
+                            data: formData
+
+                        })
+                        .then((res) => {
+                            // console.log(res.data);
+                            console.log(res.data);
+                            if(res.data.code==100){
+                                var str = res.data.msg+"\r\n"+res.data.data.msg;
+                                alert(str);
+                                
+                            }else{
+                                var lenght = res.data.data.name.length;
+                                
+                                if(lenght==0){
+                                    // console.log("数据都成功插入");
+                                    
+                                    this.$message({
+                                        type: "success",
+                                        message: "数据插入成功",
+                                    })
+                                }else{
+                                    var strName = "";
+                                    for(var i=0; i<lenght;i++){
+                                        strName = strName + res.data.data.name[i] + ",";
+                                    }
+                                    strName += "已存在，以上数据插入失败！";
+                                    alert(strName);
+                                }
+                            }
+                            
+                        }
+                        );
                     
-            //         this.tip="修改";
-            //         this.editIN = true;
-            //     }
-            // },
-            //只能输入数字
-            // onlyNumber(e){
-            //     e.target.value = e.target.value.replace(/[^\d]/g,"");
-            // },
+                }
         }
         
     }
@@ -334,8 +358,8 @@
     }
     //光圈
     .cicle {
-        width: 450px;
-        height: 450px;
+        width: 550px;
+        height: 550px;
         border-radius:50%;
         position:absolute;
         left:50%;
@@ -374,5 +398,18 @@
         // width:50px;
         // height:40px;
         // text-align: center;
+    }
+    // 文件上传 
+    .fileContent {
+        position:absolute;
+        bottom:60px;
+        text-align: center;
+        color:#666;
+        
+    }
+    .fileContent input {
+        font-size:16px;
+        margin:10px;
+        
     }
 </style>
